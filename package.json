@@ -1,0 +1,32 @@
+{
+  "name": "prlts",
+  "version": "0.0.1",
+  "description": "Pocket Relay Load Testing System",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pokt-network/prlts.git"
+  },
+  "keywords": [
+    "pokt",
+    "pocket",
+    "pocket",
+    "network",
+    "infrastructure",
+    "blockchain",
+    "decentralized"
+  ],
+  "author": "Luis C. de Leon <luis@pokt.network>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pokt-network/prlts/issues"
+  },
+  "homepage": "https://github.com/pokt-network/prlts#readme",
+  "dependencies": {
+    "@pokt-network/pocket-js": "^0.2.2-rc",
+    "child_process": "^1.0.2"
+  }
+}
