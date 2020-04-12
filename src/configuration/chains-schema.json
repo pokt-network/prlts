@@ -1,0 +1,44 @@
+{
+    "id": "/ChainList",
+    "type": "array",
+    "minItems": 1,
+    "items": {
+        "properties": {
+            "hash": {
+                "type": "string"
+            },
+            "application_private_keys": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "type": "string"
+                }
+            },
+            "payloads": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "properties": {
+                        "data": {
+                            "type": "string"
+                        },
+                        "blockchain": {
+                            "type": "string"
+                        },
+                        "method": {
+                            "type": "string"
+                        },
+                        "path": {
+                            "type": "string"
+                        },
+                        "consensus_enabled": {
+                            "type": "boolean"
+                        }
+                    },
+                    "required": ["data", "blockchain"]
+                }
+            }
+        },
+        "required": ["hash", "application_private_keys", "payloads"]
+    }
+}

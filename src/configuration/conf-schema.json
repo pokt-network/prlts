@@ -1,0 +1,9 @@
+{
+    "id": "/Configuration",
+    "type": "object",
+    "properties": {
+        "chains": {"$ref": "/ChainList"},
+        "logs_dir": {"type": "string"}
+    },
+    "required": ["chains"]
+}
