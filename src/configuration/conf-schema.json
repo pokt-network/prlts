@@ -2,8 +2,31 @@
     "id": "/Configuration",
     "type": "object",
     "properties": {
-        "chains": {"$ref": "/ChainList"},
-        "logs_dir": {"type": "string"}
+        "chains": {
+            "$ref": "/ChainList"
+        },
+        "logs_dir": {
+            "type": "string"
+        },
+        "session_block_frequency": {
+            "type": "number"
+        },
+        "block_time": {
+            "type": "number"
+        },
+        "relay_timeout": {
+            "type": "number"
+        },
+        "parallel_relays": {
+            "type": "number"
+        },
+        "dispatchers": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            }
+        }
     },
-    "required": ["chains"]
+    "required": ["chains", "session_block_frequency", "block_time", "relay_timeout", "parallel_relays", "dispatchers"]
 }
