@@ -6,7 +6,7 @@ const typeGuard = require("@pokt-network/pocket-js").typeGuard
 const RpcError = require("@pokt-network/pocket-js").RpcError
 const PocketConfiguration = require("@pokt-network/pocket-js").Configuration
 
-async function submitRandomRelay(configuration, aats, pocket) {
+async function submitRandomRelay(configuration, aats, pocket, logger) {
     try {
         // First pick a random chain from the configuration
         const chain = getRandomFromArray(configuration.chains)
@@ -40,14 +40,16 @@ async function submitRandomRelay(configuration, aats, pocket) {
 
         // Parse the response or error and log it
         if (typeGuard(responseOrError, RpcError)) {
+            logger.error("Error submitting relay", responseOrError)
+            //console.error()
             //console.error(responseOrError)
             //analytics.error = analytics.error + 1
             analytics.errorMsg = responseOrError.message
         } else {
             //console.log(responseOrError)
+            logger.debug("Success submitting relay", responseOrError)
             analytics.success = true
         }
-        console.log(responseOrError)
         return analytics
     } catch (error) {
         return {
@@ -63,10 +65,11 @@ function getRandomFromArray(array) {
 }
 
 class Server {
-    constructor(confDir) {
-        this.configuration = new Configuration(confDir)
+    constructor(confDir, logger) {
+        this.configuration = new Configuration(confDir, logger)
         this.clientPassphrase = uuidv4()
         this.applicationPassphrase = uuidv4()
+        this.logger = logger
     }
 
     async start() {
@@ -115,7 +118,7 @@ class Server {
                 const localPocketInstance = new Pocket(dispatchURLList)
                 const account = await localPocketInstance.keybase.importAccount(clientPrivateKey, this.clientPassphrase)
                 await localPocketInstance.keybase.unlockAccount(account.addressHex, this.clientPassphrase, 0)
-                tasks.push(submitRandomRelay(this.configuration, this.aats, localPocketInstance))
+                tasks.push(submitRandomRelay(this.configuration, this.aats, localPocketInstance, this.logger))
             }
             const results = await Promise.all(tasks)
             for (let index = 0; index < results.length; index++) {
@@ -143,8 +146,8 @@ class Server {
                     }
                 }
             }
-            console.log("GLOBAL ANALYTICS REPORT")
-            console.log(globalAnalytics)
+            //console.log("GLOBAL ANALYTICS REPORT")
+            this.logger.info("Global analytics", globalAnalytics)
         }
     }
 }
