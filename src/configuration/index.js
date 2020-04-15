@@ -11,7 +11,7 @@ class Configuration {
      * @throws
      * @param {string} confDir 
      */
-    constructor(confDir) {
+    constructor(confDir, logger) {
         // Set default values
         this.confDir = confDir
         this.chains = []
@@ -21,6 +21,9 @@ class Configuration {
         this.relayTimeout = 10000
         this.parallelRelays = 10
         this.dispatchers = []
+
+        // Set the logger
+        this.logger = logger
 
         // Validate configuration
         this.loadConfiguration(this.confDir)
@@ -37,8 +40,8 @@ class Configuration {
         
         // Validate the chains config
         const confRawStr = fs.readFileSync(this.confDir, "utf8")
-        console.log("Loaded configuration from: " + confDir)
-        console.log("Configuration: " + confRawStr)
+        this.logger.debug("Configuration directory", confDir)
+        this.logger.debug("Configuration content", confRawStr)
         const confRawObj = JSON.parse(confRawStr)
         ConfigurationFileValidator.addSchema(ChainListSchema, "/ChainList")
         const validationResult = ConfigurationFileValidator.validate(confRawObj, ConfigurationSchema)

@@ -3,6 +3,7 @@ config.json
 config_*.json
 
 # Logs
+log
 logs
 *.log
 npm-debug.log*
