@@ -16,6 +16,11 @@ class Configuration {
         this.confDir = confDir
         this.chains = []
         this.logsDir = "prlts.log"
+        this.sessionBlockFrequency = 25
+        this.blockTime = 60000
+        this.relayTimeout = 10000
+        this.parallelRelays = 10
+        this.dispatchers = []
 
         // Validate configuration
         this.loadConfiguration(this.confDir)
@@ -39,6 +44,11 @@ class Configuration {
         const validationResult = ConfigurationFileValidator.validate(confRawObj, ConfigurationSchema)
         if (validationResult.valid) {
             this.chains = confRawObj.chains
+            this.sessionBlockFrequency = confRawObj.session_block_frequency
+            this.blockTime = confRawObj.block_time
+            this.relayTimeout = confRawObj.relay_timeout
+            this.parallelRelays = confRawObj.parallel_relays
+            this.dispatchers = confRawObj.dispatchers
             if (confRawObj.logs_dir) {
                 this.logsDir = confRawObj.logs_dir
             }
