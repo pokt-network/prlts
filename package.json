@@ -1,5 +1,5 @@
 {
-  "name": "prlts",
+  "name": "@pokt-network/prlts",
   "version": "0.0.1",
   "description": "Pocket Relay Load Testing System",
   "main": "src/index.js",
