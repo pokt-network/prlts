@@ -85,7 +85,7 @@ class Server {
             }
             return analytics
         } catch (error) {
-            this.logger.error("error", "Error submitting relay", error)
+            this.logger.log("error", "Error submitting relay", error)
             if (typeof session !== 'undefined') {
                 return {
                     success: false,
