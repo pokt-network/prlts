@@ -5,7 +5,13 @@
         "chains": {
             "$ref": "/ChainList"
         },
-        "logs_dir": {
+        "log_level": {
+            "type": "string"
+        },
+        "logs_to_console": {
+            "type": "boolean"
+        },
+        "data_dir": {
             "type": "string"
         },
         "session_block_frequency": {
@@ -28,5 +34,5 @@
             }
         }
     },
-    "required": ["chains", "session_block_frequency", "block_time", "relay_timeout", "parallel_relays", "dispatchers"]
+    "required": ["chains", "session_block_frequency", "block_time", "relay_timeout", "parallel_relays", "dispatchers", "log_level", "logs_to_console", "data_dir"]
 }

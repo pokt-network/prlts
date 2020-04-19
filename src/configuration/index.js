@@ -3,6 +3,7 @@ const Validator = require('jsonschema').Validator
 const ConfigurationFileValidator = new Validator()
 const ChainListSchema = require("./chains-schema.json")
 const ConfigurationSchema = require("./conf-schema.json")
+const uuidv4 = require("uuid").v4
 
 class Configuration {
 
@@ -11,19 +12,18 @@ class Configuration {
      * @throws
      * @param {string} confDir 
      */
-    constructor(confDir, logger) {
+    constructor(confDir) {
         // Set default values
         this.confDir = confDir
         this.chains = []
-        this.logsDir = "prlts.log"
+        this.dataDir = ""
+        this.logLevel = ""
+        this.logsToConsole = false
         this.sessionBlockFrequency = 25
         this.blockTime = 60000
         this.relayTimeout = 10000
         this.parallelRelays = 10
         this.dispatchers = []
-
-        // Set the logger
-        this.logger = logger
 
         // Validate configuration
         this.loadConfiguration(this.confDir)
@@ -40,8 +40,6 @@ class Configuration {
         
         // Validate the chains config
         const confRawStr = fs.readFileSync(this.confDir, "utf8")
-        this.logger.debug("Configuration directory", confDir)
-        this.logger.debug("Configuration content", confRawStr)
         const confRawObj = JSON.parse(confRawStr)
         ConfigurationFileValidator.addSchema(ChainListSchema, "/ChainList")
         const validationResult = ConfigurationFileValidator.validate(confRawObj, ConfigurationSchema)
@@ -52,8 +50,16 @@ class Configuration {
             this.relayTimeout = confRawObj.relay_timeout
             this.parallelRelays = confRawObj.parallel_relays
             this.dispatchers = confRawObj.dispatchers
-            if (confRawObj.logs_dir) {
-                this.logsDir = confRawObj.logs_dir
+            this.logLevel = confRawObj.log_level
+            this.logsToConsole = confRawObj.logs_to_console
+            // Create a unique data dir within the specified data directory for this process
+            this.dataDir = `${confRawObj.data_dir}/${uuidv4()}`
+
+            // Create the data directory for this instance if not exists
+            if (!fs.existsSync(this.dataDir)) {
+                fs.mkdirSync(this.dataDir, {
+                    recursive: true
+                })
             }
         } else {
             var errorMsg = "Error validating configuration file, please follow schema\n"
