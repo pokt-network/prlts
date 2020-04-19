@@ -1,6 +1,10 @@
+# Visual Studio Code
+.vscode/
+
 # PRTLS
 config.json
 config_*.json
+data/
 
 # Logs
 log
