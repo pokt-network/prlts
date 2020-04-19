@@ -31,9 +31,7 @@
     "child_process": "^1.0.2",
     "dotenv": "^8.2.0",
     "jsonschema": "^1.2.6",
-    "pino": "^6.2.0",
-    "pino-multi-stream": "^5.0.0",
-    "pino-pretty": "^4.0.0",
-    "uuid": "^7.0.3"
+    "uuid": "^7.0.3",
+    "winston": "^3.2.1"
   }
 }
