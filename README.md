@@ -4,68 +4,114 @@
   </a>
 </div>
 
-# Project Title
+# Pocket Relay Load Testing System (PRLTS)
 
-One sentence summary of project
+Tool to stress test the Pocket Network by sending random pre-configured relays.
+
 <div>
-  <a  href="https://godoc.org/github.com/pokt-network/pocket-core"><img src="https://img.shields.io/badge/godoc-reference-blue.svg"/></a>
-  <a  href="https://goreportcard.com/report/github.com/pokt-network/pocket-core"><img src="https://goreportcard.com/badge/github.com/pokt-network/pocket-core"/></a>
-  <a href="https://golang.org"><img  src="https://img.shields.io/badge/golang-v1.11-red.svg"/></a>
-  <a  href="https://github.com/tools/godep" ><img src="https://img.shields.io/badge/godep-dependency-71a3d9.svg"/></a>
+  <a href="https://golang.org"><img  src="https://img.shields.io/badge/node-v12-red.svg"/></a>
 </div>
 
 ## Overview
 <div>
-    <a  href="https://github.com/pokt-network/pocket-core/releases"><img src="https://img.shields.io/github/release-pre/pokt-network/pocket-core.svg"/></a>
-    <a href="https://circleci.com/gh/pokt-network/pocket-core/tree/staging"><img src="https://circleci.com/gh/pokt-network/pocket-core/tree/staging.svg?style=svg"/></a>
-    <a  href="https://github.com/pokt-network/pocket-core/pulse"><img src="https://img.shields.io/github/contributors/pokt-network/pocket-core.svg"/></a>
+    <a  href="https://github.com/pokt-network/prlts/releases"><img src="https://img.shields.io/github/release-pre/pokt-network/prlts.svg"/></a>
+    <a  href="https://github.com/pokt-network/prlts/pulse"><img src="https://img.shields.io/github/contributors/pokt-network/prlts.svg"/></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"/></a>
-    <a href="https://github.com/pokt-network/pocket-core/pulse"><img src="https://img.shields.io/github/last-commit/pokt-network/pocket-core.svg"/></a>
-    <a href="https://github.com/pokt-network/pocket-core/pulls"><img src="https://img.shields.io/github/issues-pr/pokt-network/pocket-core.svg"/></a>
-    <a href="https://github.com/pokt-network/pocket-core/releases"><img src="https://img.shields.io/badge/platform-linux%20%7C%20windows%20%7C%20macos-pink.svg"/></a>
-    <a href="https://github.com/pokt-network/pocket-core/issues"><img src="https://img.shields.io/github/issues-closed/pokt-network/pocket-core.svg"/></a>
+    <a href="https://github.com/pokt-network/prlts/pulse"><img src="https://img.shields.io/github/last-commit/pokt-network/prlts.svg"/></a>
+    <a href="https://github.com/pokt-network/prlts/pulls"><img src="https://img.shields.io/github/issues-pr/pokt-network/prlts.svg"/></a>
+    <a href="https://github.com/pokt-network/prlts/releases"><img src="https://img.shields.io/badge/platform-linux%20%7C%20windows%20%7C%20macos-pink.svg"/></a>
+    <a href="https://github.com/pokt-network/prlts/issues"><img src="https://img.shields.io/github/issues-closed/pokt-network/prlts.svg"/></a>
 </div>
 
-Full Description
+## Pre-requisites
 
-## Getting Started
+1. NodeJS v12^
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+## Installation
 
-### Example usage
-
-```
-The most basic example of how you would use the project
-```
-
-### Installation
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Clone the repository wherever you want:
 
 ```
-Give the step
+git clone https://github.com/pokt-network/prlts.git
 ```
 
-And repeat
+Install dependencies
 
 ```
-until finished
+npm install
 ```
 
-End with an example of getting data out of the system or using it for a demo
+## Configuring PRLTS
 
-## Documentation
+### Configuration file location
 
-Full usage and options or a link to the docs.pokt.network site
-
-## Running the tests
-
-Explain how to run the automated tests
+#### Configuring via environment variable
 
 ```
-Give an example
+export PRTLS_CONFIG_FILE=<your path to config>/config.json
+```
+
+#### Configuring via .env file
+
+You can create a .env file to specify the location of your configuration file:
+
+```
+PRTLS_CONFIG_FILE=<your path to config>/config.json
+```
+
+### Configuration file example:
+
+```json
+{
+    "chains": [{
+        // Chain ID: https://docs.pokt.network/docs/supported-networks
+        "hash": "8cf7f8799c5b30d36c86d18f0f4ca041cf1803e0414ed9e9fd3a19ba2f0938ff",
+        // Private keys for applications that are staked for this chain
+        "application_private_keys": [],
+        // Payloads compatible with this chain
+        "payloads": [{
+            "data": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xF02c1c8e6114b1Dbe8937a39260b5b0a374432bB\", \"latest\"],\"id\":1}",
+            "blockchain": "8cf7f8799c5b30d36c86d18f0f4ca041cf1803e0414ed9e9fd3a19ba2f0938ff",
+            "consensus_enabled": false
+        }]
+    }],
+    // How many blocks are in a session in the network you're connecting to
+    "session_block_frequency": 25,
+    // The current blocktime in MS
+    "block_time": 60000,
+    // A timeout for relays, can be 0
+    "relay_timeout": 10000,
+    // How many relays in parrallel you want to submit per round
+    "parallel_relays": 10,
+    // A list of Dispatchers
+    "dispatchers": [
+        "http://node1.testnet.pokt.network:8081",
+        "http://node2.testnet.pokt.network:8081",
+        "http://node3.testnet.pokt.network:8081",
+        "http://node4.testnet.pokt.network:8081",
+        "http://node5.testnet.pokt.network:8081",
+        "http://node6.testnet.pokt.network:8081",
+        "http://node7.testnet.pokt.network:8081",
+        "http://node8.testnet.pokt.network:8081",
+        "http://node9.testnet.pokt.network:8081",
+        "http://node10.testnet.pokt.network:8081"
+    ],
+    // The directory to which you wanna output logs and analytics dta
+    "data_dir": "/Users/luyzdeleon/current_projects/prlts/data",
+    // The log level
+    "log_level": "debug",
+    // Whether or not to log to output to the console
+    "logs_to_console": true
+}
+```
+
+## Running PRLTS
+
+To run PRLTS all you have to do is:
+
+```
+cd prlts
+node src/index.js
 ```
 
 ## Contributing
