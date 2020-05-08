@@ -1,15 +1,16 @@
-const fs = require('fs')
+const fs = require("fs")
 
 class Analytics {
     constructor(configuration, logger) {
         this.configuration = configuration
         this.logger = logger
         this.analyticsDir = `${this.configuration.dataDir}/analytics`
+        this.entries = []
 
         // Create the analytics directory for this instance if not exists
         if (!fs.existsSync(this.analyticsDir)) {
             fs.mkdirSync(this.analyticsDir, {
-                recursive: true
+                recursive: true,
             })
         }
 
@@ -22,7 +23,7 @@ class Analytics {
             errorsCount: {},
             nodeErrorReports: {},
             nodeSuccesfulRelaysCount: {},
-            sessionsCount: {}
+            sessionsCount: {},
         }
     }
 
@@ -36,25 +37,38 @@ class Analytics {
     }
 
     logEntry(entry) {
+        // Increase the entry count
+        this.entries.push(entry)
+
         // Increase the total
         this.data.total = this.data.total + 1
 
         // Counts of entries per session
         const session = entry.session
-        if (typeof session !== "undefined") {
+        if (
+            typeof session !== "undefined" &&
+            typeof session.sessionHeader !== "undefined"
+        ) {
             const key = session.sessionHeader.applicationPubKey
-            let prevSessionCount = this.data.sessionsCount[key] !== undefined ? this.data.sessionsCount[key] : 0
+            let prevSessionCount =
+                this.data.sessionsCount[key] !== undefined
+                    ? this.data.sessionsCount[key]
+                    : 0
             this.data.sessionsCount[key] = prevSessionCount + 1
             let sessionNodesStr = ""
             for (let j = 0; j < session.sessionNodes.length; j++) {
-                const node = session.sessionNodes[j];
-                sessionNodesStr = sessionNodesStr.concat(`${node.address}@${node.serviceURL.toString()}\n`)
+                const node = session.sessionNodes[j]
+                sessionNodesStr = sessionNodesStr.concat(
+                    `${node.address}@${node.serviceURL.toString()}\n`
+                )
             }
         }
 
         // Increase the global avg relay time
         if (entry.relayTime > 0) {
-            this.data.avgRelayTime = this.data.avgRelayTime + ((entry.relayTime - this.data.avgRelayTime) / this.data.total)
+            this.data.avgRelayTime =
+                this.data.avgRelayTime +
+                ((entry.relayTime - this.data.avgRelayTime) / this.data.total)
         }
 
         // Increase success/error
@@ -64,11 +78,14 @@ class Analytics {
 
             // Increase successful relays per node count
             if (entry.node) {
-                let prevSuccessCount = this.data.nodeSuccesfulRelaysCount[entry.node]
+                let prevSuccessCount = this.data.nodeSuccesfulRelaysCount[
+                    entry.node
+                ]
                 if (prevSuccessCount === undefined) {
                     prevSuccessCount = 0
                 }
-                this.data.nodeSuccesfulRelaysCount[entry.node] = prevSuccessCount + 1
+                this.data.nodeSuccesfulRelaysCount[entry.node] =
+                    prevSuccessCount + 1
             }
         } else {
             // Increase total of error relays
@@ -103,7 +120,10 @@ class Analytics {
 
     save() {
         try {
-            fs.writeFileSync(`${this.analyticsDir}/data.json`, JSON.stringify(this.data))
+            fs.writeFileSync(
+                `${this.analyticsDir}/data.json`,
+                JSON.stringify(this.data)
+            )
             this.logger.log("debug", "Updated analytics with data", this.data)
         } catch (err) {
             this.logger.log("error", "Error saving analytics data", err)
