@@ -9,7 +9,14 @@
             },
             "application_private_keys": {
                 "type": "array",
-                "minItems": 1,
+                "minItems": 0,
+                "items": {
+                    "type": "string"
+                }
+            },
+            "application_public_keys": {
+                "type": "array",
+                "minItems": 0,
                 "items": {
                     "type": "string"
                 }
@@ -39,6 +46,6 @@
                 }
             }
         },
-        "required": ["hash", "application_private_keys", "payloads"]
+        "required": ["hash", "payloads"]
     }
 }

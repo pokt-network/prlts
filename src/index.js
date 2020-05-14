@@ -1,7 +1,7 @@
 const Environment = require("dotenv")
 const Configuration = require("./configuration")
 const Logger = require("./logger")
-const Relayer = require("./relayer")
+let Relayer = undefined
 
 // Load env variables
 Environment.config()
@@ -18,8 +18,15 @@ try {
     logger.log("debug", "PRLTS Configuration", configuration)
 
     // Create Relayer
-    const relayer = new Relayer(configuration, logger)
-
+    if (configuration.dispatchers && configuration.dispatchers.length > 0) {
+        Relayer = require("./relayer/dispatch")
+    } else if (configuration.gateway && configuration.gateway.length > 0) {
+        Relayer = require("./relayer/gateway")
+    } else {
+        throw new Error("Unable to load configuration; missing dispatchers and gateway")
+    }
+    relayer = new Relayer(configuration, logger)
+    
     // Start the Relayer
     logger.log("debug", "Starting Relayer")
     relayer.start()
