@@ -28,11 +28,14 @@
         },
         "dispatchers": {
             "type": "array",
-            "minItems": 1,
+            "minItems": 0,
             "items": {
                 "type": "string"
             }
+        },
+        "gateway": {
+            "type": "string"
         }
     },
-    "required": ["chains", "session_block_frequency", "block_time", "relay_timeout", "parallel_relays", "dispatchers", "log_level", "logs_to_console", "data_dir"]
+    "required": ["chains", "session_block_frequency", "block_time", "relay_timeout", "parallel_relays", "log_level", "logs_to_console", "data_dir"]
 }

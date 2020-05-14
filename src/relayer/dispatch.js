@@ -7,7 +7,7 @@ const PocketConfiguration = require("@pokt-network/pocket-js").Configuration
 const Analytics = require("./analytics")
 const getRandomFromArray = require("../utils").getRandomFromArray
 
-class Server {
+class DispatchRelayer {
     constructor(configuration, logger) {
         this.configuration = configuration
         this.logger = logger
@@ -172,4 +172,4 @@ class Server {
     }
 }
 
-module.exports = Server
+module.exports = DispatchRelayer
