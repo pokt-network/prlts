@@ -5,7 +5,7 @@ const Relayer = require("./relayer")
 
 // Load env variables
 Environment.config()
-const configFileDir = process.env.PRTLS_CONFIG_FILE
+const configFileDir = process.env.PRLTS_CONFIG_FILE
 
 try {
     // Create configuration object
