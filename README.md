@@ -48,7 +48,7 @@ npm install
 #### Configuring via environment variable
 
 ```
-export PRTLS_CONFIG_FILE=<your path to config>/config.json
+export PRLTS_CONFIG_FILE=<your path to config>/config.json
 ```
 
 #### Configuring via .env file
@@ -56,22 +56,22 @@ export PRTLS_CONFIG_FILE=<your path to config>/config.json
 You can create a .env file to specify the location of your configuration file:
 
 ```
-PRTLS_CONFIG_FILE=<your path to config>/config.json
+PRLTS_CONFIG_FILE=<your path to config>/config.json
 ```
 
-### Configuration file example:
+### Configuration file example for Dispatched Relays:
 
 ```json
 {
     "chains": [{
         // Chain ID: https://docs.pokt.network/docs/supported-networks
-        "hash": "8cf7f8799c5b30d36c86d18f0f4ca041cf1803e0414ed9e9fd3a19ba2f0938ff",
+        "hash": "0021",
         // Private keys for applications that are staked for this chain
         "application_private_keys": [],
         // Payloads compatible with this chain
         "payloads": [{
             "data": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xF02c1c8e6114b1Dbe8937a39260b5b0a374432bB\", \"latest\"],\"id\":1}",
-            "blockchain": "8cf7f8799c5b30d36c86d18f0f4ca041cf1803e0414ed9e9fd3a19ba2f0938ff",
+            "blockchain": "0021",
             "consensus_enabled": false
         }]
     }],
@@ -96,6 +96,41 @@ PRTLS_CONFIG_FILE=<your path to config>/config.json
         "http://node9.testnet.pokt.network:8081",
         "http://node10.testnet.pokt.network:8081"
     ],
+    // The directory to which you wanna output logs and analytics dta
+    "data_dir": "/Users/luyzdeleon/current_projects/prlts/data",
+    // The log level
+    "log_level": "debug",
+    // Whether or not to log to output to the console
+    "logs_to_console": true
+}
+```
+
+### Configuration file example for Gateway Relays:
+
+```json
+{
+    "chains": [{
+        // Chain ID: https://docs.pokt.network/docs/supported-networks
+        "hash": "0021",
+        // Application keys used to access the Pocket Gateway
+        "application_public_keys": [],
+        // Payloads compatible with this chain
+        "payloads": [{
+            "data": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xF02c1c8e6114b1Dbe8937a39260b5b0a374432bB\", \"latest\"],\"id\":1}",
+            "blockchain": "0021",
+            "consensus_enabled": false
+        }]
+    }],
+    // How many blocks are in a session in the network you're connecting to
+    "session_block_frequency": 25,
+    // The current blocktime in MS
+    "block_time": 60000,
+    // A timeout for relays, can be 0
+    "relay_timeout": 10000,
+    // How many relays in parrallel you want to submit per round
+    "parallel_relays": 10,
+    // Target gateway
+    "gateway": "https://mainnet.gateway.pokt.network/v1/",
     // The directory to which you wanna output logs and analytics dta
     "data_dir": "/Users/luyzdeleon/current_projects/prlts/data",
     // The log level
