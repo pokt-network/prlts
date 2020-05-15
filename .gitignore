@@ -1,7 +1,7 @@
 # Visual Studio Code
 .vscode/
 
-# PRTLS
+# PRLTS
 config.json
 config_*.json
 data/

@@ -24,6 +24,7 @@ class Configuration {
         this.relayTimeout = 10000
         this.parallelRelays = 10
         this.dispatchers = []
+        this.gateway = ""
 
         // Validate configuration
         this.loadConfiguration(this.confDir)
@@ -50,6 +51,7 @@ class Configuration {
             this.relayTimeout = confRawObj.relay_timeout
             this.parallelRelays = confRawObj.parallel_relays
             this.dispatchers = confRawObj.dispatchers
+            this.gateway = confRawObj.gateway
             this.logLevel = confRawObj.log_level
             this.logsToConsole = confRawObj.logs_to_console
             // Create a unique data dir within the specified data directory for this process
