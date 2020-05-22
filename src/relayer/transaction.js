@@ -68,8 +68,6 @@ class TransactionRelayer {
                         : responseOrError.message
             } else {
                 analytics.success = true
-                console.log("SUCCESSFUL TX:")
-                console.log(responseOrError)
             }
             return analytics
         } catch (error) {
