@@ -4,6 +4,7 @@ const ConfigurationFileValidator = new Validator()
 const ChainListSchema = require("./chains-schema.json")
 const ConfigurationSchema = require("./conf-schema.json")
 const uuidv4 = require("uuid").v4
+const TestType = require("../test-type")
 
 class Configuration {
 
@@ -11,8 +12,12 @@ class Configuration {
      * Instantiates a new configuration from a configuration directory
      * @throws
      * @param {string} confDir 
+     * @param {string} testType 
      */
-    constructor(confDir) {
+    constructor(confDir, testType) {
+        // Set testType
+        this.testType = testType
+
         // Set default values
         this.confDir = confDir
         this.chains = []
@@ -25,6 +30,7 @@ class Configuration {
         this.parallelRelays = 10
         this.dispatchers = []
         this.gateway = ""
+        this.faucetPK = ""
 
         // Validate configuration
         this.loadConfiguration(this.confDir)
@@ -52,7 +58,43 @@ class Configuration {
             this.parallelRelays = confRawObj.parallel_relays
             this.dispatchers = confRawObj.dispatchers
             this.gateway = confRawObj.gateway
+            this.faucetPK = confRawObj.faucet_pk
+            this.chainID = confRawObj.chain_id
             this.logLevel = confRawObj.log_level
+
+            // Validate fields depending on test type
+            switch (this.testType) {
+                case TestType.DISPATCH:
+                    if (
+                        this.chains.length === 0 ||
+                        this.dispatchers.length === 0
+                    ) {
+                        throw new Error(
+                            `Test type ${this.testType} error: "Invalid chains or dispatchers"`
+                        )
+                    }
+                    break
+
+                case TestType.GATEWAY:
+                    if (this.chains.length === 0 || this.gateway.length === 0) {
+                        throw new Error(
+                            `Test type ${this.testType} error: "Invalid chains or gateway"`
+                        )
+                    }
+                    break
+
+                case TestType.TRANSACTION:
+                    if (this.faucetPK.length === 0 || this.dispatchers.length === 0 || this.chainID.length === 0) {
+                        throw new Error(
+                            `Test type ${this.testType} error: "Invalid faucet_pk or dispatchers"`
+                        )
+                    }
+                    break
+
+                default:
+                    throw new Error("Invalid Test Type")
+            }
+
             this.logsToConsole = confRawObj.logs_to_console
             // Create a unique data dir within the specified data directory for this process
             this.dataDir = `${confRawObj.data_dir}/${uuidv4()}`
