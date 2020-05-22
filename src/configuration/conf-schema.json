@@ -35,6 +35,12 @@
         },
         "gateway": {
             "type": "string"
+        },
+        "faucet_pk": {
+            "type": "string"
+        },
+        "chain_id": {
+            "type": "string"
         }
     },
     "required": ["chains", "session_block_frequency", "block_time", "relay_timeout", "parallel_relays", "log_level", "logs_to_console", "data_dir"]
