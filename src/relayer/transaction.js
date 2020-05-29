@@ -141,7 +141,7 @@ class TransactionRelayer {
         const results = await Promise.all(tasks)
         self.analytics.logEntries(results)
         // Wait a random amount of time
-        await new Promise((r) => setTimeout(r, (Math.random() * (60000 - 1000) + 1000)))
+        await new Promise((r) => setTimeout(r, Math.floor(Math.random() * (60000 - 1000) + 1000)))
         setTimeout(self.launchTasks, 10000, self)
     }
 
