@@ -225,7 +225,9 @@ class DispatchRelayer {
                     true,
                     this.configuration.sessionBlockFrequency,
                     this.configuration.blockTime,
-                    undefined
+                    1,
+                    false,
+                    false
                 )
                 const pocket = this.pocketInstances[index]
                 pocket.configuration = pocketConfiguration
