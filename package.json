@@ -28,7 +28,7 @@
   "homepage": "https://github.com/pokt-network/prlts#readme",
   "dependencies": {
     "@pokt-network/aat-js": "0.1.0-rc",
-    "@pokt-network/pocket-js": "0.5.8-rc",
+    "@pokt-network/pocket-js": "0.6.5-rc",
     "child_process": "^1.0.2",
     "dotenv": "^8.2.0",
     "jsonschema": "^1.2.6",
